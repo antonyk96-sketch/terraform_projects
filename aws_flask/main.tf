@@ -8,8 +8,8 @@ variable "cidr" {
 }
 
 resource "aws_key_pair" "example" {
-  key_name   = "terraform-demo-abhi"  # Replace with your desired key name
-  public_key = file("~/.ssh/id_rsa.pub")  # Replace with the path to your public key file
+  key_name   = "terraform-flask-app-key"  
+  public_key = file("~/.ssh/id_rsa.pub")  
 }
 
 resource "aws_vpc" "myvpc" {
@@ -99,7 +99,7 @@ provisioner "remote-exec" {
     "sudo pip3 install flask",
 
     # Create systemd service
-    "echo '[Unit]\nDescription=Flask App\nAfter=network.target\n\n[Service]\nExecStart=/usr/bin/python3 /home/ubuntu/app.py\nWorkingDirectory=/home/ubuntu\nRestart=always\nUser=ubuntu\n\n[Install]\nWantedBy=multi-user.target' | sudo tee /etc/systemd/system/flaskapp.service",
+    "echo '[Unit]\nDescription=Flask App\nAfter=network.target\n\n[Service]\nExecStart=sudo /usr/bin/python3 /home/ubuntu/app.py\nWorkingDirectory=/home/ubuntu\nRestart=always\nUser=ubuntu\n\n[Install]\nWantedBy=multi-user.target' | sudo tee /etc/systemd/system/flaskapp.service",
 
     "sudo systemctl daemon-reload",
     "sudo systemctl enable flaskapp",
